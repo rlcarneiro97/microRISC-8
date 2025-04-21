@@ -15,8 +15,8 @@
 - **Registradores**:
   - **14 Registradores Gerais**: R1 a R14 (8 bits)
   - **Acumulador**: ACC ou R0 (8 bits)
-  - **Registrador Zero**: RZ ou R15 (8 bits) — valor sempre 0x00
-  - **Program Counter (PC)**: 16 bits — (Por padrão vale: 0x0000)
+  - **Registrador Zero**: RZ ou R15 (8 bits) — valor sempre `0x00`
+  - **Program Counter (PC)**: 16 bits — (Por padrão vale: `0x0000`)
   - **Instruction Register (IR)**: 8 bits
   - **Status Register (SR)**: 8 bits
     - Bit 0: Carry (C)
@@ -155,18 +155,18 @@ READ_CHAR:
 ```
 ## 🧾 Instruções de Execução do Emulador
 
-- Para rodar o **microRISC-8**, abra o terminal de sua preferência em [Emulador_microRISC-8/output] e execute o `main.exe`. 
+- Para rodar o **microRISC-8**, abra o terminal de sua preferência em `Emulador_microRISC-8/output` e execute o `main.exe`. 
 - Lembre-se de deixar o arquivo `ROM.bin` sempre na mesma pasta, pois como o nome já diz, ele é o arquivo da memoria ROM e que o emulador irá ler e executar inicialmente.
 
 ## 🧾 Instruções de Execução do Assembler e Criação do Arquivo Binário
 
-- Antes de rodar o programa, certifique-se de jogar seu `main.asm` na pasta raiz do projeto em `/Assembler_microRISC-8`.
-- Para rodar o **Assembler microRISC-8**, segue a mesma ideia do emulador, abra o terminal de sua preferência em [/Assembler_microRISC-8] e execute o comando `java assembler.java -a` OU `java assembler.java -a main.asm`.
+- Antes de rodar o programa, certifique-se de deixar o arquivo `main.asm` na pasta raiz do projeto em `/Assembler_microRISC-8`.
+- Para rodar o **Assembler microRISC-8**, segue a mesma ideia do emulador, abra o terminal de sua preferência em `/Assembler_microRISC-8` e execute o comando `java assembler.java -a` ou `java assembler.java -a main.asm`.
 - Por padrão, o programa irá buscar o arquivo `main.asm`, mas você pode executa-lo usando outro nome. Para isso, passe o nome dele depois do parâmetro `-a` na hora da execução, por exemplo, se meu Assembly for `meu-assembly.asm`, você colocará `java assembler.java -a meu-assembly.asm`
-- O assembly só permite gerar um binário com o nome `ROM.bin`, que é o nome do binário da memória de leitura.
+- O Assembler só permite gerar um binário com o nome `ROM.bin`, sendo este o nome do binário da memória de leitura.
 - O menu de ajuda pode ser acessado escrevendo `java assembler.java -h` ou `java assembler.java -help`.
 
 ## 🧾 Instruções de Execução de um Novo Arquivo Binário
 
-- Para rodar seu binário personalizado, irei supor que você já realizou o passo passado de gerar o `ROM.bin` pelo Assembler.
-- Com o `ROM.bin` gerado, basta copia-lo para dentro da pasta [Emulador_microRISC-8/output]. Se já houver um arquivo de nome igual, ou você renomeia-o para não perde-lo, ou você copia, cola e substitui este pelo novo arquivo. Depois, basta executar o emulador.
+- Para rodar seu binário personalizado, realize o passo passado de gerar o `ROM.bin` pelo Assembler.
+- Com o `ROM.bin` gerado, basta copia-lo para dentro da pasta `Emulador_microRISC-8/output`. Se já houver um arquivo de nome igual, ou você renomeia-o para não perde-lo, ou você copia, cola e substitui este pelo novo arquivo. Depois, basta executar o emulador!
