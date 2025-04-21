@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "*.sqlbook": "sql",
+        "*.ndjson": "jsonl",
+        "*.dbclient-js": "javascript",
+        "*.embeddedhtml": "html",
+        "locale.h": "c",
+        "stdio.h": "c",
+        "cpu.h": "c",
+        "memory.h": "c",
+        "cba.h": "c",
+        "type_traits": "c",
+        "string.h": "c"
+    },
+    "files.encoding": "iso88591"
+}

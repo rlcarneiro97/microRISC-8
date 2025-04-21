@@ -1,0 +1,54 @@
+typedef struct{
+	
+	// sem o unsigned, os valores de char sao tratados como signed, então são limitados
+
+	unsigned char REG[16]; // registradores gerais de 8 bits
+	unsigned short int PC; // program counter de 16 bits
+	unsigned char IR; // registrador de instrucao de 8 bits
+	status_register SR; // registrador de status de 8 bits booleanos
+	unsigned short int SP; // stack pointer de 16 bits
+	unsigned short int MAR; // registrador de endereco de memoria de 16 bits
+	unsigned char MDR; // registrador de dados da memoria de 8 bits
+	
+} CPU;
+
+-------------------------------------------------------------- OPCODES --------------------------------------------------------------
+
+0 A 35 = 36 OPCODES
+
+LDA 	(LOAD ADDRESS)
+LDI 	(LOAD IMMEDIATE)
+STA 	(STORE ADDRESS)
+MOV 	(MOVE)
+ADD 	(ADDITION)
+ADD.I 	(ADDITION IMMEDIATE)
+SUB 	(SUBTRACTION)
+SUB.I 	(SUBTRACTION IMMEDIATE)
+SHT.L 	(SHIFT LEFT LOGICAL)
+SHT.R 	(SHIFT RIGHT LOGICAL)
+HLT 	(HALT PROGRAM)
+JMP 	(JUMP)
+CMP 	(COMPARE)
+CMP.I 	(COMPARE IMMEDIATE)
+BEQ 	(BRANCH IF EQUAL)
+BNE 	(BRANCH IF NOT EQUAL)
+BLE 	(BRANCH IF LESS OR EQUAL)
+BGE 	(BRANCH IF GREATER OR EQUAL)
+BLT 	(BRANCH IF LESS THAN)
+BGT 	(BRANCH IF GREATER THAN)
+BEQ.R 	(BRANCH IF EQUAL RELATIVE)
+BNE.R 	(BRANCH IF NOT EQUAL RELATIVE)
+BLE.R 	(BRANCH IF LESS OR EQUAL RELATIVE)
+BGE.R 	(BRANCH IF GREATER OR EQUAL RELATIVE)
+BLT.R 	(BRANCH IF LESS THAN RELATIVE)
+BGT.R 	(BRANCH IF GREATER THAN RELATIVE)
+AND 	(AND OPERATION BETWEEN TWO REGS)
+OR 	(OR OPERATION BETWEEN TWO REGS)
+XOR 	(XOR OPERATION BETWEEN TWO REGS)
+NOT 	(NOT OPERATION BETWEEN TWO REGS)
+END     (END PROGRAM)
+IN	(INPUT DATA)
+DRAW	(DRAW CHAR)
+OUT	(OUTPUT INTEGER)
+CALL	(CALL SUBROTINE)
+RET	(RETURN SUBROTINE)

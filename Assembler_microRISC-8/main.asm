@@ -1,0 +1,70 @@
+LDI R0, #0
+LDI R1, #0
+LDI R2, #0
+LDI R3, #0
+LDI R4, #0
+
+CALL TEXT ; TEXT 00100010
+CALL READ ; READ 01000011
+MOV R1, R0
+
+CALL TEXT ; TEXT 00100010
+CALL READ ; READ 01000011
+MOV R2, R0
+
+ADD R1, R2
+MOV R0, R1
+OUT
+HLT
+LDI R0, #13
+DRAW
+LDI R0, #13
+DRAW
+
+; teste dos novos opcodes
+; INI.P &49152
+; SET.P R1
+; GET.P R2
+; UPD.P R3
+; UPI.P #1
+; UPI.P #-1
+; fim do teste dos novos opcodes
+
+CALL TEXT
+CALL READ_CHAR
+DRAW
+
+END
+
+TEXT:
+	LDI R0, 'D'
+	DRAW
+	LDI R0, 'I'
+	DRAW
+	LDI R0, 'G'
+	DRAW
+	LDI R0, 'I'
+	DRAW
+	LDI R0, 'T'
+	DRAW
+	LDI R0, 'E'
+	DRAW
+	LDI R0, ':'
+	DRAW
+	LDI R0, ' '
+	DRAW
+	RET
+
+READ:
+	LDA R3, &65533
+	CMP.I R3, #0
+	BEQ.R #-7
+	IN
+	RET
+
+READ_CHAR:
+	LDA R4, &65531
+	CMP.I R4, #0
+	BEQ.R #-7
+	GETC
+	RET
