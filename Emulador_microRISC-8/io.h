@@ -8,219 +8,6 @@
 #include <string.h> // P/ manipulação de strings
 #include <stdlib.h>
 
-void init_terminal(int CLOCK_FREQUENCY){
-
-    // Limpa a tela e exibe o terminal
-    system("cls || clear");
-    putchar('M');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('i');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('c');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('r');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('o');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('R');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('I');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('S');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('C');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('-');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('8');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('V');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('e');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('r');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('s');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('i');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('o');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('n');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('1');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('.');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('0');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('\n');
-
-    Sleep(CLOCK_FREQUENCY);
-    putchar('C');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('o');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('p');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('y');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('r');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('i');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('g');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('h');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('t');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('(');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('C');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(')');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('2');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('0');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('2');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('5');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('b');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('y');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('R');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('A');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('F');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('A');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('E');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('L');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('C');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('A');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('R');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('N');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('E');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('I');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('R');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('O');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('\n');
-
-    Sleep(CLOCK_FREQUENCY);
-    putchar('8');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('1');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('9');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('2');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('B');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('y');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('t');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('e');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('s');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('F');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('r');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('e');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('e');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('\n');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('\n');
-    Sleep(CLOCK_FREQUENCY);
-
-    putchar('R');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('e');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('a');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('d');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('y');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('(');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('P');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('r');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('e');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('s');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('s');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(' ');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('E');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('n');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('t');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('e');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('r');
-    Sleep(CLOCK_FREQUENCY);
-    putchar(')');
-    Sleep(CLOCK_FREQUENCY);
-    putchar('\n');
-    Sleep(CLOCK_FREQUENCY);
-
-    getchar(); // Aguarda a entrada do usuário
-    system("cls || clear"); // Limpa a tela e exibe o terminal novamente
-
-}
-
 void draw_fix_terminal(){
     
     // Limpa a tela e exibe o terminal
@@ -234,70 +21,96 @@ void draw_fix_terminal(){
 
 void input_handler(MEMORY *memory){
 
-    static char operacao[4] = {0}; // 3 caracteres + '\0'
+    static char buffer_integer[4] = {0}; // 3 caracteres + '\0'
     static unsigned char input_state = 0; // Variável para armazenar o caractere lido
 
-    // Se uma tecla foi pressionada
+    // Se uma tecla foi pressionada, entra no if
     if (_kbhit()) {
+        
+        input_state = _getch(); // Captura a tecla automaticamente
 
-        input_state = _getch(); // Captura a tecla sem ENTER
+        // LEMBRAR QUE SEMPRE TEM QUE SETAR O INPUT_MODE NO ASSEMBLY COM "STA" ANTES DE REALIZAR O INPUT
 
-        // ------------------ parte para lidar com o inteiro lido ------------------
+        // verifica se o input lido é um char immediate
+        if (memory->ADDRESS[65534] == 1) {
 
-        // Se pressionar Enter, encerra a leitura
-        if (input_state == '\r') { // No Windows, Enter é '\r'. No Linux, seria '\n'
-
-            // se pressionar a tecla e o status char estiver igual a 1, significa que o char já foi lido
-            if(memory->ADDRESS[65531]){
-                memory->ADDRESS[65531] = 0; // Reseta o status do char para não lido
-            } else {
-                memory->ADDRESS[65531] = 1; // Seta o status do char para lido
-            }
-
-            input_state = (unsigned short int) atoi(operacao);
-
-            memory->ADDRESS[65534] = input_state; // Armazena o valor lido na memória de entrada
-            memory->ADDRESS[65533] = 1; // input tá pronto
-
-            draw_fix_terminal(); // Desenha o terminal novamente
-            memset(operacao, 0, sizeof(char) * 4); // Zera o array
-
-            return;
+            memory->ADDRESS[65533] = input_state; // Armazena o valor lido na primeira posição da memória de entrada
+            memory->ADDRESS[65532] = 1; // Seta o data_state para 1, indicando que o dado foi lido
+            draw_fix_terminal(); // Limpa a tela e exibe o terminal
 
         }
 
-        // Se pressionar Backspace, apaga o último caractere
-        if (input_state == '\b') {
-            int len = strlen(operacao);
-            if (len > 0) {
-                operacao[len - 1] = '\0';  // Apaga o último caractere
+        // verifica se o input lido é um char
+        if (memory->ADDRESS[65534] == 2) {
+
+            if(input_state == '\r'){
+
+                memory->ADDRESS[65532] = 1; // Seta o data_state para 1, indicando que o dado esta pronto para ser lido
+                draw_fix_terminal(); // Limpa a tela e exibe o terminal
+                return;
+
             }
 
-            memory->ADDRESS[65532] = '\0'; // Reseta o caractere lido
+            if(input_state == '\b'){
 
-            draw_fix_terminal(); // Desenha o terminal novamente
-            printf("%s", operacao); // Exibe a string atualizada
+                memory->ADDRESS[65533] = '\0'; // Apaga o valor lido na posição da memória de entrada
+                draw_fix_terminal(); // Limpa a tela e exibe o terminal
+                // printf("%c", input_state); // Exibe o caractere lido na tela
+                putchar(input_state); // Exibe o caractere lido na tela
+                return;
 
+            }
+
+            // se não for nem Enter nem Backspace, armazena o valor lido na posição da memória de entrada
+            memory->ADDRESS[65533] = input_state;
+            draw_fix_terminal(); // Limpa a tela e exibe o terminal
+            // printf("%c", input_state); // Exibe o caractere lido na tela
+            putchar(input_state); // Exibe o caractere lido na tela
             return;
-
+            
         }
 
-        // Adiciona o caractere ao final da string
-        int len = strlen(operacao);
+        // verifica se o input lido é um inteiro
+        if (memory->ADDRESS[65534] == 3) {
 
-        // Evita estouro do buffer
-        if (len < 3){
-            operacao[len] = input_state;
-            operacao[len + 1] = '\0';  // Garante o final da string
+            if(input_state == '\r'){
+               
+                input_state = (unsigned short int) atoi(buffer_integer); // Converte a string para inteiro
+                memory->ADDRESS[65533] = input_state; // Armazena o valor lido na memória de entrada
+                memory->ADDRESS[65532] = 1; // input tá pronto
 
-            // ------------------ parte para lidar com o caractere lido ------------------
+                draw_fix_terminal(); // Desenha o terminal novamente
+                memset(buffer_integer, 0, sizeof(char) * 4); // Zera o array
+                return;
 
-            memory->ADDRESS[65532] = input_state; // Armazena o caractere lido na memória de entrada
+            }
 
-            draw_fix_terminal(); // Desenha o terminal novamente
-            printf("%s", operacao); // Exibe a string atualizada
+            if(input_state == '\b'){
 
-            return;
+                int len = strlen(buffer_integer); // Armazena o tamaho do buffer já usado
+
+                if (len > 0) {
+                    buffer_integer[len - 1] = '\0';  // Apaga o último caractere
+                }
+
+                draw_fix_terminal(); // Desenha o terminal novamente
+                printf("%s", buffer_integer); // Exibe a string atualizada
+                return;
+
+            } 
+
+            int len = strlen(buffer_integer); // Armazena o tamaho do buffer já usado
+
+            // Evita estouro do buffer
+            if (len < 3){
+                buffer_integer[len] = input_state;
+                buffer_integer[len + 1] = '\0';  // Garante o final da string
+
+                draw_fix_terminal(); // Desenha o terminal novamente
+                printf("%s", buffer_integer); // Exibe a string atualizada
+                return;
+
+            }
 
         }
 
@@ -305,14 +118,11 @@ void input_handler(MEMORY *memory){
 
 }
 
-void output_handler(MEMORY *memory, unsigned char R0){
+void output_handler(MEMORY *memory, unsigned char output_state){
 
-    unsigned char output_state = R0;
-
-    // Se o registrador de saída estiver diferente do valor atual
+    // Se o output estiver diferente do valor atual
     if (output_state != memory->ADDRESS[65535]) {
-        // Atualiza o valor da saída
-        memory->ADDRESS[65535] = output_state;
+        memory->ADDRESS[65535] = output_state; // Atualiza o valor da saída
     }
 }
 

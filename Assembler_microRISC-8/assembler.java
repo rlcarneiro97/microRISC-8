@@ -210,6 +210,9 @@ public class assembler {
         // percorre o arquivo em busca de labels
         for (String linha : linhas) {
 
+            // Remove tudo após o ponto e vírgula (comentário)
+            linha = linha.split(";", 2)[0];
+
             // verifica se é ou nao comentário e se a linha não é vazia
             if(!linha.isEmpty() && !linha.startsWith(";")) { // ignora linhas vazias e comentários
 
@@ -217,20 +220,21 @@ public class assembler {
 
                 while (matcher.find()) {
 
-                    // verifica se é um opcode
-                    if(tabCiclos.containsKey(matcher.group())){
-                        // System.out.printf("OPCODE ENCONTRADO: " + matcher.group());
-                        // System.out.println("("+cicloTotal+") ");
-                        cicloTotal += tabCiclos.get(matcher.group()); // Adiciona o número de ciclos da instrução
-                    }
                     // verifica se é um label
-                    else if(matcher.group().matches("\\b([A-Za-z0-9_]+):")){
-                        String label = matcher.group(1);
+                    if(matcher.group().matches("\\b([A-Za-z0-9_]+):")){
+                        String label = matcher.group(1).toUpperCase();
                         tabelaLabels.put(label, cicloTotal); // Adiciona a label e o ciclo atual no mapa de labels
                         System.out.println("LABEL -> \""+label+"\" | ENDERECO -> " +cicloTotal); // Exibe a label e o ciclo atual
+                        break;
+                    }
+                    // verifica se é um opcode
+                    if(tabCiclos.containsKey(matcher.group())){
+                        cicloTotal += tabCiclos.get(matcher.group().toUpperCase()); // Adiciona o número de ciclos da instrução
+                        break;
                     }
                     
-                }
+                } 
+
             }  
 
         }
@@ -338,7 +342,7 @@ public class assembler {
                     // Trata labels como endereco de memoria
                     } else if(!token.group().toUpperCase().endsWith(":") && tabelaLabels.containsKey(token.group().toUpperCase())) { // verifica se é uma label sem ":"
                         int endereco16bits = tabelaLabels.get(token.group().toUpperCase()); // Pega o endereço da label
-                        System.out.printf(token.group().toUpperCase()+" ");
+                        System.out.printf(token.group().toUpperCase()+" ("+tabelaLabels.get(token.group().toUpperCase())+") ");
                         output.write( ((endereco16bits >> 8) & 0xFF) ); // Escreve os 8 bits mais significativos no arquivo de saí­da
                         output.flush(); // Garante que o byte seja escrito imediatamente
                         output.write( (endereco16bits & 0xFF) ); // Escreve os 8 bits menos significativos no arquivo de saí­da

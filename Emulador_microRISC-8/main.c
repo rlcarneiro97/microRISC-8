@@ -12,7 +12,7 @@ int main(){
 	MEMORY memory = {0}; // inicializa a estrutura da memoria
 
 	runCPU(&cpu, &memory); // inicializa o processador
-
+	
 	return 0;
 
 }

@@ -52,10 +52,9 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 	cpu->SR.C = 0; 				// Inicializa o Carry Flag com 0
 	cpu->SR.Z = 0; 				// Inicializa o Zero Flag com 0
 	cpu->REG[15] = 0; 			// Inicializa o Registrador RZ[R15] com 0
-	memory->ADDRESS[65531] = 0; // Inicializa o endereco do status do char com 0
-	memory->ADDRESS[65532] = 0; // Inicializa o endereco do input char com 0
-	memory->ADDRESS[65533] = 0; // Inicializa o endereco do status do input com 0
-	memory->ADDRESS[65534] = 0; // Inicializa o endereco do input com 0
+	memory->ADDRESS[65532] = 0; // Inicializa o endereco de data_state com 0
+	memory->ADDRESS[65533] = 0; // Inicializa o endereco do input com 0
+	memory->ADDRESS[65534] = 0; // Inicializa o endereco do input_mode com 0
 	memory->ADDRESS[65535] = 0; // Inicializa o endereco do output com 0
 
 	// Carrega as palavras binarias da ROM e joga dentro do array memory
@@ -65,16 +64,13 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 	// Verifica se houve erro ao carregar a ROM
 	if(!fileError) {
 
-		// init_terminal(CLOCK_FREQUENCY); // Desenha o terminal com efeito
 		draw_fix_terminal(); // Desenha o terminal fixo
 
 		// iniciar o ciclo de busca, decodificacao e execucao
 		while(!reset && cpu->PC < SIZE_ROM) {
 
-			// Verifica se houve entrada de dados
-			input_handler(memory);
-			// Verifica se houve saida de dados
-			output_handler(memory, cpu->REG[0]);
+			input_handler(memory); // Verifica se houve entrada de dados
+			output_handler(memory, cpu->REG[0]); // Verifica se houve saida de dados
 
 			cpu->MAR = cpu->PC; // carrega o endereco da instrucao no MAR
 			cpu->MDR = memory->ADDRESS[cpu->MAR]; // carrega o dado da memoria no MDR
@@ -166,11 +162,11 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					*/
 					cpu->MAR = ( (memory->ADDRESS[cpu->MAR] << 8) | (memory->ADDRESS[cpu->MAR+1]) );
 					
-					// Se não estiver dentro do intervalo da RAM, pula a instrucao
-					if(CBACheckChip(cpu->MAR) != 1){
-						cpu->PC += 4;
-						break;
-					}
+					// Se não estiver dentro do intervalo da RAM e de periféricos, pula a instrucao
+					// if(CBACheckChip(cpu->MAR) == 0){
+					// 	cpu->PC += 4;
+					// 	break;
+					// }
 
 					memory->ADDRESS[cpu->MAR] = cpu->REG[cpu->MDR]; // carrega o valor da do registrador na memoria
 
@@ -449,7 +445,7 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 				case 10:
 					// printf("Instrucao HLT | PC (%d)\n", cpu->PC);
 					
-					printf("\n\nHLT -> Pausando o ciclo de busca, decodificacao e execucao...\n");
+					printf("\n\nHLT | Pressione a tecla \"Enter\" para continuar. . .\n");
 					getchar();
 					
 					cpu->PC += 1; //PC recebe o endereco da proxima instrucao
@@ -902,13 +898,13 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					break;
 
 				case 31:
-					// printf("Instrucao IN | PC (%d)\n", cpu->PC);
+					// printf("Instrucao IN - INPUT | PC (%d)\n", cpu->PC);
 
-					// verifica o endereco de memoria que armazena o status do input
-					// se no endereço estiver true, armazena o valor da memoria RAM(65534) no ACC(R0) e zera o status do input
-					if(memory->ADDRESS[65533]){
-						cpu->REG[0] = memory->ADDRESS[65534];
-						memory->ADDRESS[65533] = 0; // Reseta o status do input
+					// verifica se o data_state é 1, ou seja, se o dado está pronto para ser lido
+					if(memory->ADDRESS[65532]){
+						cpu->REG[0] = memory->ADDRESS[65533]; // carrega o valor do dado no registrador 0 ou ACC
+						memory->ADDRESS[65532] = 0; // reseta o data_state para 0
+						memory->ADDRESS[65534] = 0; // reseta o input_mode para 0
 					}
 					
 					cpu->PC += 1;
@@ -943,13 +939,21 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 				case 34:
 					// printf("Instrucao CALL | PC (%d)\n", cpu->PC);
 
-					cpu->PC += 3; // Incrementa o PC para o próximo endereço de instrução
+					result_16 = cpu->PC + 3; // Próxima instrução após CALL + endereço
 
-					cpu->SP--; // Decrementa a pilha antes de armazenar o próximo byte
-					memory->ADDRESS[cpu->SP] = (cpu->PC & 0xFF); // Armazena o byte menos significativo do PC na pilha
+					cpu->SP--;
+					memory->ADDRESS[cpu->SP] = (result_16 & 0xFF);
+
+					cpu->SP--;
+					memory->ADDRESS[cpu->SP] = ((result_16 >> 8) & 0xFF);
+
+					// cpu->PC += 3; // Incrementa o PC para o próximo endereço de instrução
+
+					// cpu->SP--; // Decrementa a pilha antes de armazenar o próximo byte
+					// memory->ADDRESS[cpu->SP] = (cpu->PC & 0xFF); // Armazena o byte menos significativo do PC na pilha
 					
-					cpu->SP--; // Decrementa a pilha antes de armazenar o próximo byte
-					memory->ADDRESS[cpu->SP] = ((cpu->PC >> 8) & 0xFF); // Armazena o byte mais significativo do PC na pilha
+					// cpu->SP--; // Decrementa a pilha antes de armazenar o próximo byte
+					// memory->ADDRESS[cpu->SP] = ((cpu->PC >> 8) & 0xFF); // Armazena o byte mais significativo do PC na pilha
 
 					cpu->MAR++; // incrementa o MAR para ler o endereco da subrotina
 					
