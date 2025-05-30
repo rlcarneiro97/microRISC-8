@@ -39,14 +39,14 @@
 
 ### 🧾 Mapeamento I/O
 
-| Endereço  | Função                  		|
-|-----------|-------------------------------|
-| 0xE000    | Stack Pointer da sub-rotina   |
-| 0xFFFB    | Status do input de chars  	|
-| 0xFFFC    | Valor do input de chars     	|
-| 0xFFFD    | Status do input de inteiros 	|
-| 0xFFFE    | Valor do input de inteiros  	|
-| 0xFFFF    | Output numérico         		|
+| Endereço  | Função                  								|
+|-----------|-------------------------------------------------------|
+| 0xE000    | Stack Pointer da sub-rotina							|
+| 0xFFFB    | DATA_STATE do INPUT 						 			|
+| 0xFFFC    | Valor do INPUT		     							|
+| 0xFFFD    | INPUT_MODE (1 = Char Immediate, 2 = Char, 3 = Integer)|
+| 0xFFFE    | OUTPUT_MODE (1 = Char, 2 = Integer)  					|
+| 0xFFFF    | Valor do OUTPUT        		 						|
 
 - OBS: Como esse processador não tem interrupções como os processadores modernos, o funcionamento dele é por `Polling`, ou seja, sempre está verificando a mudança dos status em pontos mapeados na memória.
 
@@ -79,9 +79,9 @@
 | 20–25  | `BEQ.R`, `BNE.R`, etc. 								| Saltos condicionais relativos    			| 2      |
 | 26–29  | `AND`, `OR`, `XOR`, `NOT` 							| Lógicas entre registradores   			| 2      |
 | 30     | `END`       											| Finaliza execução                			| 1      |
-| 31–33  | `IN`, `DRAW`, `OUT` 									| I/O                                 		| 1      |
+| 31–33  | `IN`, `OUT` 											| I/O                                 		| 1      |
 | 34–35  | `CALL`, `RET` 										| Sub-rotinas com pilha                     | 1–3    |
-| 36–41  | `INI.P`, `SET.P`, `GET.P`, `UPD.P`, `UPI.P`, `GETC` 	| Manipulação do ponteiro GP e input char	| 1–3 	 |
+| 36–41  | `INI.P`, `SET.P`, `GET.P`, `UPD.P`, `UPI.P` 			| Manipulação do ponteiro GP				| 1–3 	 |
 
 ---
 
@@ -93,63 +93,114 @@ LDI R1, #0
 LDI R2, #0
 LDI R3, #0
 LDI R4, #0
-
-CALL TEXT ; subroutine example
-CALL READ ; subroutine example
-MOV R1, R0
-
-CALL TEXT ; subroutine example
-CALL READ ; subroutine example
-MOV R2, R0
-
-; comment example
-
-ADD R1, R2
-MOV R0, R1
-OUT
-HLT
-LDI R0, #13
-DRAW
-LDI R0, #13
-DRAW
+LDI R5, #0
 
 CALL TEXT
+CALL READ_INTEGER
+MOV R1, R0
+CALL TEXT
+CALL READ_INTEGER
+MOV R2, R0
+ADD R1, R2
+MOV R0, R1
+CALL MODO_INTEGER_OUT
+OUT
+HLT
+
+CALL MODO_CHAR_OUT
+LDI R0, #13
+OUT
+LDI R0, #13
+OUT
+CALL TEXT
 CALL READ_CHAR
-DRAW
+OUT
+HLT
+
+CALL MODO_CHAR_OUT
+LDI R0, #13
+OUT
+LDI R0, #13
+OUT
+CALL TEXT
+CALL READ_CHAR_I
+OUT
 
 END
 
 TEXT:
+	CALL MODO_CHAR_OUT
 	LDI R0, 'D'
-	DRAW
+	OUT
 	LDI R0, 'I'
-	DRAW
+	OUT
 	LDI R0, 'G'
-	DRAW
+	OUT
 	LDI R0, 'I'
-	DRAW
+	OUT
 	LDI R0, 'T'
-	DRAW
+	OUT
 	LDI R0, 'E'
-	DRAW
+	OUT
 	LDI R0, ':'
-	DRAW
+	OUT
 	LDI R0, ' '
-	DRAW
+	OUT
 	RET
 
-READ:
-	LDA R3, &65533
+;---------------------------------------------------------------------------------------------
+
+MODO_CHAR_OUT:
+	LDI R5, #1 ; CARREGA O VALOR DO MODO DE OUTPUT (char - modo 1)
+	STA R5, &65534 ; INSERE O VALOR DO OUTPUT_MODE NA MEMORIA
+	RET
+
+MODO_INTEGER_OUT:
+	LDI R5, #2 ; CARREGA O VALOR DO MODO DE OUTPUT (inteiro - modo 2)
+	STA R5, &65534 ; INSERE O VALOR DO OUTPUT_MODE NA MEMORIA
+	RET
+
+;---------------------------------------------------------------------------------------------
+
+MODO_CHAR_I:
+	LDI R4, #1 ; CARREGA O VALOR DO MODO DE INPUT (char - modo 1)
+	STA R4, &65533 ; INSERE O VALOR DO INPUT_MODE NA MEMORIA
+	RET
+
+MODO_CHAR:
+	LDI R4, #2 ; CARREGA O VALOR DO MODO DE INPUT (char - modo 2)
+	STA R4, &65533 ; INSERE O VALOR DO INPUT_MODE NA MEMORIA
+	RET
+	
+MODO_INTEGER:
+	LDI R4, #3 ; CARREGA O VALOR DO MODO DE INPUT (inteiro - modo 3)
+	STA R4, &65533 ; INSERE O VALOR DO INPUT_MODE NA MEMORIA
+	RET
+
+;---------------------------------------------------------------------------------------------
+
+READ_CHAR_I:
+	CALL MODO_CHAR_I ; SETA O MODO DE INPUT PARA CARACTERE IMEDIATO
+	LDA R3, &65531 ; CARREGA O DATA_STATE DE INPUT VERIFICANDO SE ESTA PRONTO
 	CMP.I R3, #0
 	BEQ.R #-7
 	IN
 	RET
 
 READ_CHAR:
-	LDA R4, &65531
-	CMP.I R4, #0
+	CALL MODO_CHAR ; SETA O MODO DE INPUT PARA CARACTERE
+	LDA R3, &65531 ; CARREGA O DATA_STATE DE INPUT VERIFICANDO SE ESTA PRONTO
+	CMP.I R3, #0
 	BEQ.R #-7
-	GETC
+	IN
+	RET
+	
+READ_INTEGER:
+	CALL MODO_INTEGER ; SETA O MODO DE INPUT PARA INTEIRO
+	LDA R3, &65531 ; CARREGA O DATA_STATE DE INPUT VERIFICANDO SE ESTA PRONTO
+	CMP.I R3, #0
+	BEQ.R #-7
+	IN
 	RET
 
 ```

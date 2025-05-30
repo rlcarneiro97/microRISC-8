@@ -8,6 +8,12 @@
 #include <string.h> // P/ manipulação de strings
 #include <stdlib.h>
 
+#define DATA_STATE 65531 // Endereço de data_state
+#define INPUT 65532 // Endereço de input
+#define INPUT_MODE 65533 // Endereço de input_mode
+#define OUTPUT_MODE 65534 // Endereço de output_mode
+#define OUTPUT 65535 // Endereço de output
+
 void draw_fix_terminal(){
     
     // Limpa a tela e exibe o terminal
@@ -32,20 +38,20 @@ void input_handler(MEMORY *memory){
         // LEMBRAR QUE SEMPRE TEM QUE SETAR O INPUT_MODE NO ASSEMBLY COM "STA" ANTES DE REALIZAR O INPUT
 
         // verifica se o input lido é um char immediate
-        if (memory->ADDRESS[65534] == 1) {
+        if (memory->ADDRESS[INPUT_MODE] == 1) {
 
-            memory->ADDRESS[65533] = input_state; // Armazena o valor lido na primeira posição da memória de entrada
-            memory->ADDRESS[65532] = 1; // Seta o data_state para 1, indicando que o dado foi lido
+            memory->ADDRESS[INPUT] = input_state; // Armazena o valor lido na primeira posição da memória de entrada
+            memory->ADDRESS[DATA_STATE] = 1; // Seta o data_state para 1, indicando que o dado foi lido
             draw_fix_terminal(); // Limpa a tela e exibe o terminal
 
         }
 
         // verifica se o input lido é um char
-        if (memory->ADDRESS[65534] == 2) {
+        if (memory->ADDRESS[INPUT_MODE] == 2) {
 
             if(input_state == '\r'){
 
-                memory->ADDRESS[65532] = 1; // Seta o data_state para 1, indicando que o dado esta pronto para ser lido
+                memory->ADDRESS[DATA_STATE] = 1; // Seta o data_state para 1, indicando que o dado esta pronto para ser lido
                 draw_fix_terminal(); // Limpa a tela e exibe o terminal
                 return;
 
@@ -53,7 +59,7 @@ void input_handler(MEMORY *memory){
 
             if(input_state == '\b'){
 
-                memory->ADDRESS[65533] = '\0'; // Apaga o valor lido na posição da memória de entrada
+                memory->ADDRESS[INPUT] = '\0'; // Apaga o valor lido na posição da memória de entrada
                 draw_fix_terminal(); // Limpa a tela e exibe o terminal
                 // printf("%c", input_state); // Exibe o caractere lido na tela
                 putchar(input_state); // Exibe o caractere lido na tela
@@ -62,7 +68,7 @@ void input_handler(MEMORY *memory){
             }
 
             // se não for nem Enter nem Backspace, armazena o valor lido na posição da memória de entrada
-            memory->ADDRESS[65533] = input_state;
+            memory->ADDRESS[INPUT] = input_state;
             draw_fix_terminal(); // Limpa a tela e exibe o terminal
             // printf("%c", input_state); // Exibe o caractere lido na tela
             putchar(input_state); // Exibe o caractere lido na tela
@@ -71,13 +77,13 @@ void input_handler(MEMORY *memory){
         }
 
         // verifica se o input lido é um inteiro
-        if (memory->ADDRESS[65534] == 3) {
+        if (memory->ADDRESS[INPUT_MODE] == 3) {
 
             if(input_state == '\r'){
                
                 input_state = (unsigned short int) atoi(buffer_integer); // Converte a string para inteiro
-                memory->ADDRESS[65533] = input_state; // Armazena o valor lido na memória de entrada
-                memory->ADDRESS[65532] = 1; // input tá pronto
+                memory->ADDRESS[INPUT] = input_state; // Armazena o valor lido na memória de entrada
+                memory->ADDRESS[DATA_STATE] = 1; // input tá pronto
 
                 draw_fix_terminal(); // Desenha o terminal novamente
                 memset(buffer_integer, 0, sizeof(char) * 4); // Zera o array
@@ -118,25 +124,33 @@ void input_handler(MEMORY *memory){
 
 }
 
-void output_handler(MEMORY *memory, unsigned char output_state){
+void output_handler(MEMORY *memory, unsigned char output_reg_value){
 
-    // Se o output estiver diferente do valor atual
-    if (output_state != memory->ADDRESS[65535]) {
-        memory->ADDRESS[65535] = output_state; // Atualiza o valor da saída
+    // Se o registrador de output estiver diferente do valor da RAM de saída, atualiza a memória de saída
+    if (output_reg_value != memory->ADDRESS[OUTPUT]) {
+        memory->ADDRESS[OUTPUT] = output_reg_value; // Atualiza o valor da saída
     }
 }
 
-void draw_char(unsigned char output){
+void draw_output(MEMORY *memory){
+
+    // Verifica o modo de saída tipo char
+    if(memory->ADDRESS[OUTPUT_MODE] == 1){
+
+        putchar(memory->ADDRESS[OUTPUT]); // Exibe o valor da memoria de saída sem pular linha
+        fflush(stdout); // Garante que o caractere apareça imediatamente
+
+        return;
+
+    } 
     
-    putchar(output); // Exibe o valor da memoria de saída sem pular linha
-    fflush(stdout); // Garante que o caractere apareca imediatamente
+    // Verifica o modo de saída tipo integer
+    else if(memory->ADDRESS[OUTPUT_MODE] == 2){
 
-}
+        printf("%d", memory->ADDRESS[OUTPUT]); // Exibe o valor do inteiro
+        return;
 
-void draw_output(unsigned char output){
-
-    // Exibe o valor da memoria de saída sem pular linha
-    printf("%d", output); // Exibe o inteiro
+    }
 
 }
 

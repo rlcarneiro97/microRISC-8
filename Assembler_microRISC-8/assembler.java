@@ -84,16 +84,14 @@ public class assembler {
             Map.entry("NOT",    0b00011101),
             Map.entry("END",    0b00011110),
             Map.entry("IN",     0b00011111),
-            Map.entry("DRAW",   0b00100000),
-            Map.entry("OUT",    0b00100001),
-            Map.entry("CALL",   0b00100010),
-            Map.entry("RET",    0b00100011),
-            Map.entry("INI.P",  0b00100100),
-            Map.entry("SET.P",  0b00100101),
-            Map.entry("GET.P",  0b00100110),
-            Map.entry("UPD.P",  0b00100111),
-            Map.entry("UPI.P",  0b00101000),
-            Map.entry("GETC",   0b00101001)
+            Map.entry("OUT",    0b00100000),
+            Map.entry("CALL",   0b00100001),
+            Map.entry("RET",    0b00100010),
+            Map.entry("INI.P",  0b00100011),
+            Map.entry("SET.P",  0b00100100),
+            Map.entry("GET.P",  0b00100101),
+            Map.entry("UPD.P",  0b00100110),
+            Map.entry("UPI.P",  0b00100111)
         );
 
         // Cria um mapa para armazenar os registradores
@@ -152,7 +150,6 @@ public class assembler {
             Map.entry("NOT",   2),
             Map.entry("END",   1),
             Map.entry("IN",    1),
-            Map.entry("DRAW",  1),
             Map.entry("OUT",   1),
             Map.entry("CALL",  3),
             Map.entry("RET",   1),
@@ -160,8 +157,7 @@ public class assembler {
             Map.entry("SET.P", 2),
             Map.entry("GET.P", 2),
             Map.entry("UPD.P", 2),
-            Map.entry("UPI.P", 2),
-            Map.entry("GETC",  1)
+            Map.entry("UPI.P", 2)
         );
 
         // Cria um mapa vazio para armazenar as labels e seus endereços

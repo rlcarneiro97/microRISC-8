@@ -9,6 +9,12 @@
 
 #define CLOCK_FREQUENCY 0 // X milissegundos
 
+#define DATA_STATE 65531 // Endereço de data_state
+#define INPUT 65532 // Endereço de input
+#define INPUT_MODE 65533 // Endereço de input_mode
+#define OUTPUT_MODE 65534 // Endereço de output_mode
+#define OUTPUT 65535 // Endereço de output
+
 //--------------------------------- REGISTRADORES DO PROCESSADOR ---------------------------------
 
 typedef struct{	
@@ -43,19 +49,20 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 	unsigned char reg1, reg2; 			// Registradores de operacao
 	unsigned char shift_amount; 		// Quantidade de deslocamentos
 	
-	cpu->PC = 0; 				// Inicializa o Program Counter com 0
-	cpu->IR = 0; 				// Inicializa o Registrador de Instrucao com 0
-	cpu->SP = 57344; 			// Inicializa o Stack Pointer com o endereco do final da "RAM+1", ou seja, (57344)
-	cpu->GP = 49152; 			// Inicializa o Global Pointer com 49152 (inicio da RAM)
-	cpu->MAR = 0; 				// Inicializa o Registrador de Endereco de Memoria com 0
-	cpu->MDR = 0; 				// Inicializa o Registrador de Dados da Memoria com 0
-	cpu->SR.C = 0; 				// Inicializa o Carry Flag com 0
-	cpu->SR.Z = 0; 				// Inicializa o Zero Flag com 0
-	cpu->REG[15] = 0; 			// Inicializa o Registrador RZ[R15] com 0
-	memory->ADDRESS[65532] = 0; // Inicializa o endereco de data_state com 0
-	memory->ADDRESS[65533] = 0; // Inicializa o endereco do input com 0
-	memory->ADDRESS[65534] = 0; // Inicializa o endereco do input_mode com 0
-	memory->ADDRESS[65535] = 0; // Inicializa o endereco do output com 0
+	cpu->PC = 0; 						// Inicializa o Program Counter com 0
+	cpu->IR = 0; 						// Inicializa o Registrador de Instrucao com 0
+	cpu->SP = 57344; 					// Inicializa o Stack Pointer com o endereco do final da "RAM+1", ou seja, (57344)
+	cpu->GP = 49152; 					// Inicializa o Global Pointer com 49152 (inicio da RAM)
+	cpu->MAR = 0; 						// Inicializa o Registrador de Endereco de Memoria com 0
+	cpu->MDR = 0; 						// Inicializa o Registrador de Dados da Memoria com 0
+	cpu->SR.C = 0; 						// Inicializa o Carry Flag com 0
+	cpu->SR.Z = 0; 						// Inicializa o Zero Flag com 0
+	cpu->REG[15] = 0; 					// Inicializa o Registrador RZ[R15] com 0
+	memory->ADDRESS[DATA_STATE] = 0; 	// Inicializa o endereco de data_state com 0
+	memory->ADDRESS[INPUT] = 0; 		// Inicializa o endereco do input com 0
+	memory->ADDRESS[INPUT_MODE] = 0; 	// Inicializa o endereco do input_mode com 0
+	memory->ADDRESS[OUTPUT_MODE] = 0; 	// Inicializa o endereco do output_mode com 0
+	memory->ADDRESS[OUTPUT] = 0; 		// Inicializa o endereco do output com 0
 
 	// Carrega as palavras binarias da ROM e joga dentro do array memory
 	int fileError = readWordBinFile("ROM.bin", memory->ADDRESS);
@@ -901,10 +908,10 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					// printf("Instrucao IN - INPUT | PC (%d)\n", cpu->PC);
 
 					// verifica se o data_state é 1, ou seja, se o dado está pronto para ser lido
-					if(memory->ADDRESS[65532]){
-						cpu->REG[0] = memory->ADDRESS[65533]; // carrega o valor do dado no registrador 0 ou ACC
-						memory->ADDRESS[65532] = 0; // reseta o data_state para 0
-						memory->ADDRESS[65534] = 0; // reseta o input_mode para 0
+					if(memory->ADDRESS[DATA_STATE]){
+						cpu->REG[0] = memory->ADDRESS[INPUT]; // carrega o valor do dado no registrador 0 ou ACC
+						memory->ADDRESS[DATA_STATE] = 0; // reseta o data_state para 0
+						memory->ADDRESS[INPUT_MODE] = 0; // reseta o input_mode para 0
 					}
 					
 					cpu->PC += 1;
@@ -913,30 +920,17 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					break;
 
 				case 32:
-					// printf("Instrucao DRAW | PC (%d)\n", cpu->PC);
+					// printf("Instrucao OUT - OUTPUT | PC (%d)\n", cpu->PC);
 
-					memory->ADDRESS[65535] = cpu->REG[0]; // envia um valor de output na memoria RAM(65535) para ser exibido na tela
+					memory->ADDRESS[OUTPUT] = cpu->REG[0]; // envia um valor de output na memoria RAM(65535) para ser exibido na tela
+					draw_output(memory); // exibe um valor/char na memoria de saida
 
-					draw_char(memory->ADDRESS[65535]); // exibe char da memoria de saida
-					
 					cpu->PC += 1;
 
 					Sleep(CLOCK_FREQUENCY);
 					break;
 
 				case 33:
-					// printf("Instrucao OUT | PC (%d)\n", cpu->PC);
-
-					memory->ADDRESS[65535] = cpu->REG[0]; // envia um valor de output na memoria RAM(65535) para ser exibido na tela
-
-					draw_output(memory->ADDRESS[65535]); // exibe inteiro na memoria de saida
-
-					cpu->PC += 1;
-
-					Sleep(CLOCK_FREQUENCY);
-					break;
-
-				case 34:
 					// printf("Instrucao CALL | PC (%d)\n", cpu->PC);
 
 					result_16 = cpu->PC + 3; // Próxima instrução após CALL + endereço
@@ -946,14 +940,6 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 
 					cpu->SP--;
 					memory->ADDRESS[cpu->SP] = ((result_16 >> 8) & 0xFF);
-
-					// cpu->PC += 3; // Incrementa o PC para o próximo endereço de instrução
-
-					// cpu->SP--; // Decrementa a pilha antes de armazenar o próximo byte
-					// memory->ADDRESS[cpu->SP] = (cpu->PC & 0xFF); // Armazena o byte menos significativo do PC na pilha
-					
-					// cpu->SP--; // Decrementa a pilha antes de armazenar o próximo byte
-					// memory->ADDRESS[cpu->SP] = ((cpu->PC >> 8) & 0xFF); // Armazena o byte mais significativo do PC na pilha
 
 					cpu->MAR++; // incrementa o MAR para ler o endereco da subrotina
 					
@@ -969,7 +955,7 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					Sleep(CLOCK_FREQUENCY);
 					break;
 
-				case 35:
+				case 34:
 					// printf("Instrucao RET | PC (%d)\n", cpu->PC);
 
 					/*
@@ -983,7 +969,7 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					Sleep(CLOCK_FREQUENCY);
 					break;
 
-				case 36:
+				case 35:
 					// printf("Instrucao INI.P | PC (%d)\n", cpu->PC);
 					// (INITIALIZE POINTER)	- INICIALIZA PONTEIRO PASSANDO UM ENDERECO DE MEMORIA
 
@@ -1003,7 +989,7 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					Sleep(CLOCK_FREQUENCY);
 					break;
 				
-				case 37:
+				case 36:
 					// printf("Instrucao SET.P | PC (%d)\n", cpu->PC);
 					// (SET POINTER) - SETA UM VALOR (DE 8 BITS) AO ENDERECO DE GP (semelhante ao STA)
 
@@ -1026,7 +1012,7 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					Sleep(CLOCK_FREQUENCY);
 					break;
 					
-				case 38:
+				case 37:
 					// printf("Instrucao GET.P | PC (%d)\n", cpu->PC);
 					// GET.P (GET POINTER) - PEGA  O VALOR (DE 8 BITS) NO ENDERECO DE GP (semelhante ao LDA)
 
@@ -1055,7 +1041,7 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					Sleep(CLOCK_FREQUENCY);
 					break;
 				
-				case 39:
+				case 38:
 					// printf("Instrucao UPD.P | PC (%d)\n", cpu->PC);
 					// UPD.P (UPDATE POINTER) - ATUALIZA PONTEIRO COM O VALOR DE UM REGISTRADOR (POSITIVO OU NEGATIVO)
 
@@ -1072,7 +1058,7 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 					Sleep(CLOCK_FREQUENCY);
 					break;
 
-				case 40:
+				case 39:
 					// printf("Instrucao UPI.P | PC (%d)\n", cpu->PC);
 					// UPI.P (UPDATE IMMEDIATE POINTER) - ATUALIZA PONTEIRO COM UM VALOR IMEDIATO (POSITIVO OU NEGATIVO)
 
@@ -1088,21 +1074,6 @@ void runCPU(CPU* cpu, MEMORY* memory) {
 
 				Sleep(CLOCK_FREQUENCY);
 				break;
-
-				case 41:
-					// printf("Instrucao GETC | PC (%d)\n", cpu->PC);
-
-					// verifica o endereco de memoria que armazena o status do input de caracteres
-					// se no endereco for true, armazena o valor da memoria RAM(65532) no ACC(R0) e zera o status do input char
-					if(memory->ADDRESS[65531]){
-						cpu->REG[0] = memory->ADDRESS[65532];
-						memory->ADDRESS[65531] = 0; // Reseta o status do input char
-					}
-					
-					cpu->PC += 1;
-
-					Sleep(CLOCK_FREQUENCY);
-					break;
 				
 				default:
 					// printf("Instrucao nao encontrada: %d | Program Counter: %d\n\n", cpu->IR, cpu->PC);
